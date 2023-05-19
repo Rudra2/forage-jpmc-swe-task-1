@@ -1,0 +1,111 @@
+From 57ed1951a970712ef8ed96af985adb3a7b3e125d Mon Sep 17 00:00:00 2001
+From: Rudra2 <ruchobe@gmail.com>
+Date: Fri, 19 May 2023 18:52:11 -0400
+Subject: [PATCH] Patch File Created
+
+---
+ .DS_Store                          | Bin 0 -> 6148 bytes
+ 0001-Re-add-sample-unit-test.patch |  44 +++++++++++++++++++++++++++++
+ client3.py                         |  10 +++----
+ 3 files changed, 49 insertions(+), 5 deletions(-)
+ create mode 100644 .DS_Store
+ create mode 100644 0001-Re-add-sample-unit-test.patch
+
+diff --git a/.DS_Store b/.DS_Store
+new file mode 100644
+index 0000000000000000000000000000000000000000..b4c2d054fc0b893b559a1d8cbb71af0fb5a0443b
+GIT binary patch
+literal 6148
+zcmeHKJ5Iwu5S<M!EYXCHa!-Ji8!VCOk<ud+ECr-QP7!){9EXM@a1+Eaka+U}*|I`O
+z0dJ()=bf47wO`@!h)7yKwhNKDh}3XJdD3NSnpdCLEFu*!={>fa#p<rx?I)GT1In%B
+zLN@XshcW-79p-jj)2z4M8nOEM?B(YD?e%h;Z-311?+4E|y9Sj;1*iZOpaN9jUn+o}
+ztyZ5pa-{-PfC_vopx=iKS1f_OqkTHC*a!gB-*_`z+bjXh8UU8S-VqU4aw^cNDMpOs
+zbi{MimB8N7>5}YZ+$T;>F`*<o9r0}Cl8Pf&DnJFs3Y_?MuKoWCeq{b1lenV-RNzl3
+zkg8_YEb&UwTPH84y*9&d;a`SYE5~B37-+2+8*RnsgSxEO$d|z0(ddX99mpR6)rCd{
+HenWvzj1Ma7
+
+literal 0
+HcmV?d00001
+
+diff --git a/0001-Re-add-sample-unit-test.patch b/0001-Re-add-sample-unit-test.patch
+new file mode 100644
+index 0000000..6763e20
+--- /dev/null
++++ b/0001-Re-add-sample-unit-test.patch
+@@ -0,0 +1,44 @@
++From 879221fec2b863d37d5b493f02a530a8098ef6ef Mon Sep 17 00:00:00 2001
++From: Joe Ferrer <joe@theforage.com>
++Date: Wed, 1 Mar 2023 00:11:51 +1100
++Subject: [PATCH] Re-add sample unit test
++
++---
++ client_test.py | 25 +++++++++++++++++++++++++
++ 1 file changed, 25 insertions(+)
++ create mode 100644 client_test.py
++
++diff --git a/client_test.py b/client_test.py
++new file mode 100644
++index 0000000..af2bf26
++--- /dev/null
+++++ b/client_test.py
++@@ -0,0 +1,25 @@
+++import unittest
+++from client3 import getDataPoint
+++
+++class ClientTest(unittest.TestCase):
+++  def test_getDataPoint_calculatePrice(self):
+++    quotes = [
+++      {'top_ask': {'price': 121.2, 'size': 36}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 120.48, 'size': 109}, 'id': '0.109974697771', 'stock': 'ABC'},
+++      {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+++    ]
+++    """ ------------ Add the assertion below ------------ """
+++
+++  def test_getDataPoint_calculatePriceBidGreaterThanAsk(self):
+++    quotes = [
+++      {'top_ask': {'price': 119.2, 'size': 36}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 120.48, 'size': 109}, 'id': '0.109974697771', 'stock': 'ABC'},
+++      {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+++    ]
+++    """ ------------ Add the assertion below ------------ """
+++
+++
+++  """ ------------ Add more unit tests ------------ """
+++
+++
+++
+++if __name__ == '__main__':
+++    unittest.main()
++-- 
++2.40.1
++
+diff --git a/client3.py b/client3.py
+index 3fc09b7..af59dba 100644
+--- a/client3.py
++++ b/client3.py
+@@ -35,14 +35,14 @@ def getDataPoint(quote):
+     stock = quote['stock']
+     bid_price = float(quote['top_bid']['price'])
+     ask_price = float(quote['top_ask']['price'])
+-    price = bid_price
++    price = (bid_price+ask_price)/2
+     return stock, bid_price, ask_price, price
+ 
+ 
+ def getRatio(price_a, price_b):
+-    """ Get ratio of price_a and price_b """
+-    """ ------------- Update this function ------------- """
+-    return 1
++    if(price_b==0):
++        return
++    return price_a/price_b
+ 
+ 
+ # Main
+@@ -56,4 +56,4 @@ if __name__ == "__main__":
+             stock, bid_price, ask_price, price = getDataPoint(quote)
+             print("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
+ 
+-        print("Ratio %s" % getRatio(price, price))
++        print("Ratio %s" % getRatio(price['ABC'], price['DEF']))
+-- 
+2.40.1
+
